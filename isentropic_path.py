@@ -187,6 +187,7 @@ def main() -> None:
     A = read_A_interactive()
     branch = ask_branch()
     construct_isentropic_path(A, branch=branch, verbose=True)
+    input("Many thanks.")
 
 
 if __name__ == "__main__":
