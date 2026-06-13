@@ -3,11 +3,21 @@
 #
 
 import math
+import sys
+import os
 from typing import List, Tuple, Optional
 
 
 LN2 = math.log(2.0)
 
+
+def pause_if_windows():
+    if os.name == "nt":  # Windows
+        try:
+            if sys.stdin.isatty():
+                input("\nExecution complete. Press Enter to exit...")
+        except Exception:
+            pass
 
 def f(x: float) -> float:
     if x <= 0.0 or x >= 1.0:
@@ -187,8 +197,8 @@ def main() -> None:
     A = read_A_interactive()
     branch = ask_branch()
     construct_isentropic_path(A, branch=branch, verbose=True)
-    input("Many thanks.")
-
+    
+    pause_if_windows()
 
 if __name__ == "__main__":
     main()
