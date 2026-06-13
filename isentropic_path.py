@@ -12,7 +12,7 @@ LN2 = math.log(2.0)
 
 
 def pause_if_windows():
-    if os.name == "nt":  # Windows
+    if os.name == "nt":
         try:
             if sys.stdin.isatty():
                 input("\nExecution complete. Press Enter to exit...")
