@@ -122,7 +122,6 @@ def construct_isentropic_path(
         s_up = 1.0 - s_low
 
         b_i = s_low if branch == "lower" else s_up
-        En_B += f(b_i)
 
         bound = min(a1, a2)
         valid_fuzzy = b_i <= bound + 1e-12
@@ -137,6 +136,14 @@ def construct_isentropic_path(
             ok = "OK" if valid_fuzzy else "VIOLATES  b_i <= min(a_i, a_{i+1})"
             print(f"    b_{i+1} <= min(a_i, a_{{i+1}})  ?  {ok}")
 
+        if not valid_fuzzy:
+            if verbose:
+                print(f"    !! b_{i+1} = {b_i:.12f} > min(a_{v1}, a_{v2}) = {bound}")
+                print(f"    !! No valid b_{i+1} exists for this pair (fuzzy-graph bound violated).")
+            B.append((f"{v1}{v2}", float("nan")))
+            continue
+
+        En_B += f(b_i)
         B.append((f"{v1}{v2}", b_i))
 
     if verbose:
@@ -150,7 +157,10 @@ def construct_isentropic_path(
         print()
         print("    B = {")
         for e, b in B:
-            print(f"          ( {e},  b = {b:.12f} )")
+            if math.isnan(b):
+                print(f"          ( {e},  b = NO SOLUTION )")
+            else:
+                print(f"          ( {e},  b = {b:.12f} )")
         print("        }")
         print("  " + "=" * 60)
 
